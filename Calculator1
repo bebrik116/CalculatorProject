@@ -1,27 +1,63 @@
-# gui_calc.py
+# smart_calc.py
 
 import tkinter as tk
 
+# Логика (из первого CLI-калькулятора)
+def add(x, y):
+    return x + y
+
+def subtract(x, y):
+    return x - y
+
+def multiply(x, y):
+    return x * y
+
+def divide(x, y):
+    if y == 0:
+        return "Ошибка"
+    return x / y
+
+# Обработка "="
+def calculate():
+    try:
+        expr = entry.get()
+        # Разбор выражения вручную
+        for op in ['+', '-', '*', '/']:
+            if op in expr:
+                x_str, y_str = expr.split(op)
+                x = float(x_str.strip())
+                y = float(y_str.strip())
+                result = {
+                    '+': add,
+                    '-': subtract,
+                    '*': multiply,
+                    '/': divide
+                }[op](x, y)
+                entry.delete(0, tk.END)
+                entry.insert(tk.END, str(result))
+                return
+        entry.delete(0, tk.END)
+        entry.insert(tk.END, "Ошибка: нет операции")
+    except Exception:
+        entry.delete(0, tk.END)
+        entry.insert(tk.END, "Ошибка")
+
+# Кнопки
 def click(symbol):
     entry.insert(tk.END, symbol)
 
 def clear():
     entry.delete(0, tk.END)
 
-def calculate():
-    try:
-        result = eval(entry.get())
-        entry.delete(0, tk.END)
-        entry.insert(tk.END, str(result))
-    except:
-        entry.delete(0, tk.END)
-        entry.insert(tk.END, "Ошибка")
-
+# GUI
 root = tk.Tk()
 root.title("Калькулятор")
 
-entry = tk.Entry(root, width=25, font=('Arial', 18), borderwidth=2, relief="groove", justify='right')
-entry.grid(row=0, column=0, columnspan=4, padx=10, pady=10)
+root.geometry("300x400")
+root.configure(bg="#e8f0fe")
+
+entry = tk.Entry(root, font=('Arial', 24), borderwidth=2, relief="groove", justify='right')
+entry.grid(row=0, column=0, columnspan=4, padx=10, pady=20, sticky="nsew")
 
 buttons = [
     ('7', 1, 0), ('8', 1, 1), ('9', 1, 2), ('/', 1, 3),
@@ -32,9 +68,15 @@ buttons = [
 ]
 
 for (text, row, col, *span) in buttons:
-    action = lambda x=text: calculate() if x == '=' else clear() if x == 'C' else click(x)
     colspan = span[0] if span else 1
-    tk.Button(root, text=text, width=5 if colspan == 1 else 20, height=2,
-              font=('Arial', 14), command=action).grid(row=row, column=col, columnspan=colspan, sticky="nsew")
+    action = lambda x=text: calculate() if x == '=' else clear() if x == 'C' else click(x)
+    tk.Button(root, text=text, font=('Arial', 18), width=5 if colspan == 1 else 23, height=2,
+              bg="#4285f4" if text == '=' else "#ffffff",
+              fg="white" if text == '=' else "black",
+              command=action).grid(row=row, column=col, columnspan=colspan, sticky="nsew", padx=2, pady=2)
+
+root.grid_rowconfigure(5, weight=1)
+for i in range(4):
+    root.grid_columnconfigure(i, weight=1)
 
 root.mainloop()
