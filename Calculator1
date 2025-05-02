@@ -1,47 +1,40 @@
-# calc.py
+# gui_calc.py
 
-def add(x, y):
-    return x + y
+import tkinter as tk
 
-def subtract(x, y):
-    return x - y
+def click(symbol):
+    entry.insert(tk.END, symbol)
 
-def multiply(x, y):
-    return x * y
+def clear():
+    entry.delete(0, tk.END)
 
-def divide(x, y):
-    if y == 0:
-        return "Ошибка: деление на ноль!"
-    return x / y
-
-def main():
-    print("Простой калькулятор")
-    print("Операции:")
-    print("1. Сложение")
-    print("2. Вычитание")
-    print("3. Умножение")
-    print("4. Деление")
-
-    choice = input("Выберите операцию (1/2/3/4): ")
-    if choice not in ('1', '2', '3', '4'):
-        print("Неверный выбор")
-        return
-
+def calculate():
     try:
-        num1 = float(input("Введите первое число: "))
-        num2 = float(input("Введите второе число: "))
-    except ValueError:
-        print("Ошибка: введены не числа.")
-        return
+        result = eval(entry.get())
+        entry.delete(0, tk.END)
+        entry.insert(tk.END, str(result))
+    except:
+        entry.delete(0, tk.END)
+        entry.insert(tk.END, "Ошибка")
 
-    if choice == '1':
-        print(f"Результат: {add(num1, num2)}")
-    elif choice == '2':
-        print(f"Результат: {subtract(num1, num2)}")
-    elif choice == '3':
-        print(f"Результат: {multiply(num1, num2)}")
-    elif choice == '4':
-        print(f"Результат: {divide(num1, num2)}")
+root = tk.Tk()
+root.title("Калькулятор")
 
-if __name__ == "__main__":
-    main()
+entry = tk.Entry(root, width=25, font=('Arial', 18), borderwidth=2, relief="groove", justify='right')
+entry.grid(row=0, column=0, columnspan=4, padx=10, pady=10)
+
+buttons = [
+    ('7', 1, 0), ('8', 1, 1), ('9', 1, 2), ('/', 1, 3),
+    ('4', 2, 0), ('5', 2, 1), ('6', 2, 2), ('*', 2, 3),
+    ('1', 3, 0), ('2', 3, 1), ('3', 3, 2), ('-', 3, 3),
+    ('0', 4, 0), ('.', 4, 1), ('C', 4, 2), ('+', 4, 3),
+    ('=', 5, 0, 4)
+]
+
+for (text, row, col, *span) in buttons:
+    action = lambda x=text: calculate() if x == '=' else clear() if x == 'C' else click(x)
+    colspan = span[0] if span else 1
+    tk.Button(root, text=text, width=5 if colspan == 1 else 20, height=2,
+              font=('Arial', 14), command=action).grid(row=row, column=col, columnspan=colspan, sticky="nsew")
+
+root.mainloop()
