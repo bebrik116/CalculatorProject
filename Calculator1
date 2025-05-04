@@ -7,8 +7,10 @@ def click(symbol):
         entry.insert(tk.END, f"{symbol}(")
     elif symbol == 'π':
         entry.insert(tk.END, 'pi')
+
     elif symbol == 'e':
         entry.insert(tk.END, 'e')
+        
     else:
         entry.insert(tk.END, symbol)
 
