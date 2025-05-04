@@ -1,47 +1,75 @@
-# calc.py
+import tkinter as tk
+import math
 
-def add(x, y):
-    return x + y
+# Обработка кнопок
+def click(symbol):
+    if symbol in ('sin', 'cos', 'tan', 'log', 'sqrt'):
+        entry.insert(tk.END, f"{symbol}(")
+    else:
+        entry.insert(tk.END, symbol)
 
-def subtract(x, y):
-    return x - y
+def clear():
+    entry.delete(0, tk.END)
 
-def multiply(x, y):
-    return x * y
-
-def divide(x, y):
-    if y == 0:
-        return "Ошибка: деление на ноль!"
-    return x / y
-
-def main():
-    print("Простой калькулятор")
-    print("Операции:")
-    print("1. Сложение")
-    print("2. Вычитание")
-    print("3. Умножение")
-    print("4. Деление")
-
-    choice = input("Выберите операцию (1/2/3/4): ")
-    if choice not in ('1', '2', '3', '4'):
-        print("Неверный выбор")
-        return
-
+def calculate():
+    expr = entry.get().replace('^', '**')
     try:
-        num1 = float(input("Введите первое число: "))
-        num2 = float(input("Введите второе число: "))
-    except ValueError:
-        print("Ошибка: введены не числа.")
-        return
+        # Разрешённые функции и константы
+        allowed_names = {k: v for k, v in math.__dict__.items() if not k.startswith("__")}
+        result = eval(expr, {"__builtins__": None}, allowed_names)
+        entry.delete(0, tk.END)
+        entry.insert(tk.END, str(result))
+    except Exception:
+        entry.delete(0, tk.END)
+        entry.insert(tk.END, "Ошибка")
 
-    if choice == '1':
-        print(f"Результат: {add(num1, num2)}")
-    elif choice == '2':
-        print(f"Результат: {subtract(num1, num2)}")
-    elif choice == '3':
-        print(f"Результат: {multiply(num1, num2)}")
-    elif choice == '4':
-        print(f"Результат: {divide(num1, num2)}")
+# GUI
+root = tk.Tk()
+root.title("Расширенный калькулятор")
 
-if __name__ == "__main__":
-    main()
+root.geometry("360x500")
+root.configure(bg="#e8f0fe")
+
+entry = tk.Entry(root, font=('Arial', 24), borderwidth=2, relief="groove", justify='right')
+entry.grid(row=0, column=0, columnspan=5, padx=10, pady=20, sticky="nsew")
+
+buttons = [
+    ('7', 1, 0),  ('8', 1, 1),  ('9', 1, 2),  ('/', 1, 3),  ('sin', 1, 4),
+    ('4', 2, 0),  ('5', 2, 1),  ('6', 2, 2),  ('*', 2, 3),  ('cos', 2, 4),
+    ('1', 3, 0),  ('2', 3, 1),  ('3', 3, 2),  ('-', 3, 3),  ('tan', 3, 4),
+    ('0', 4, 0),  ('.', 4, 1),  ('^', 4, 2),  ('+', 4, 3),  ('log', 4, 4),
+    ('(', 5, 0),  (')', 5, 1),  ('sqrt', 5, 2), ('C', 5, 3), ('=', 5, 4)
+]
+for (text, row, col) in buttons:
+    action = lambda x=text: calculate() if x == '=' else clear() if x == 'C' else click(x)
+    # Цветовая палитра
+    if text in ('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.'):
+        bg_color = "#D6EAF8"  # нежно-синий
+        fg_color = "#154360"
+    elif text in ('+', '-', '*', '/', '^'):
+        bg_color = "#FAD7A0"  # тёпло-оранжевый
+        fg_color = "#935116"
+    elif text in ('sin', 'cos', 'tan', 'log', 'sqrt'):
+        bg_color = "#D5F5E3"  # мятный
+        fg_color = "#196F3D"
+    elif text == '=':
+        bg_color = "#D2B4DE"  # сиреневый
+        fg_color = "white"
+    elif text == 'C':
+        bg_color = "#F1948A"  # розовый
+        fg_color = "white"
+    else:
+        bg_color = "#F0F3F4"  # светлый серый
+        fg_color = "black"
+
+    tk.Button(root, text=text, font=('Arial', 16), width=5, height=2,
+              bg=bg_color, fg=fg_color, activebackground="#e0e0e0",
+              command=action).grid(row=row, column=col, padx=2, pady=2, sticky="nsew")
+
+
+for i in range(6):
+    root.grid_rowconfigure(i, weight=1)
+for j in range(5):
+    root.grid_columnconfigure(j, weight=1)
+
+root.mainloop()
