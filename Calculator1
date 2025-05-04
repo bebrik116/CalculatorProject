@@ -5,6 +5,10 @@ import math
 def click(symbol):
     if symbol in ('sin', 'cos', 'tan', 'log', 'sqrt'):
         entry.insert(tk.END, f"{symbol}(")
+    elif symbol == 'π':
+        entry.insert(tk.END, 'pi')
+    elif symbol == 'e':
+        entry.insert(tk.END, 'e')
     else:
         entry.insert(tk.END, symbol)
 
@@ -14,8 +18,10 @@ def clear():
 def calculate():
     expr = entry.get().replace('^', '**')
     try:
-        # Разрешённые функции и константы
         allowed_names = {k: v for k, v in math.__dict__.items() if not k.startswith("__")}
+        # Добавим явные алиасы, если вдруг math.__dict__ не содержит их как нужно
+        allowed_names['pi'] = math.pi
+        allowed_names['e'] = math.e
         result = eval(expr, {"__builtins__": None}, allowed_names)
         entry.delete(0, tk.END)
         entry.insert(tk.END, str(result))
@@ -27,7 +33,7 @@ def calculate():
 root = tk.Tk()
 root.title("Расширенный калькулятор")
 
-root.geometry("360x500")
+root.geometry("360x550")
 root.configure(bg="#e8f0fe")
 
 entry = tk.Entry(root, font=('Arial', 24), borderwidth=2, relief="groove", justify='right')
@@ -38,36 +44,39 @@ buttons = [
     ('4', 2, 0),  ('5', 2, 1),  ('6', 2, 2),  ('*', 2, 3),  ('cos', 2, 4),
     ('1', 3, 0),  ('2', 3, 1),  ('3', 3, 2),  ('-', 3, 3),  ('tan', 3, 4),
     ('0', 4, 0),  ('.', 4, 1),  ('^', 4, 2),  ('+', 4, 3),  ('log', 4, 4),
-    ('(', 5, 0),  (')', 5, 1),  ('sqrt', 5, 2), ('C', 5, 3), ('=', 5, 4)
+    ('(', 5, 0),  (')', 5, 1),  ('sqrt', 5, 2), ('C', 5, 3), ('=', 5, 4),
+    ('π', 6, 0),  ('e', 6, 1)
 ]
+
 for (text, row, col) in buttons:
     action = lambda x=text: calculate() if x == '=' else clear() if x == 'C' else click(x)
-    # Цветовая палитра
     if text in ('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.'):
-        bg_color = "#D6EAF8"  # нежно-синий
+        bg_color = "#D6EAF8"
         fg_color = "#154360"
     elif text in ('+', '-', '*', '/', '^'):
-        bg_color = "#FAD7A0"  # тёпло-оранжевый
+        bg_color = "#FAD7A0"
         fg_color = "#935116"
     elif text in ('sin', 'cos', 'tan', 'log', 'sqrt'):
-        bg_color = "#D5F5E3"  # мятный
+        bg_color = "#D5F5E3"
         fg_color = "#196F3D"
+    elif text in ('π', 'e'):
+        bg_color = "#AED6F1"
+        fg_color = "#1A5276"
     elif text == '=':
-        bg_color = "#D2B4DE"  # сиреневый
+        bg_color = "#D2B4DE"
         fg_color = "white"
     elif text == 'C':
-        bg_color = "#F1948A"  # розовый
+        bg_color = "#F1948A"
         fg_color = "white"
     else:
-        bg_color = "#F0F3F4"  # светлый серый
+        bg_color = "#F0F3F4"
         fg_color = "black"
 
     tk.Button(root, text=text, font=('Arial', 16), width=5, height=2,
               bg=bg_color, fg=fg_color, activebackground="#e0e0e0",
               command=action).grid(row=row, column=col, padx=2, pady=2, sticky="nsew")
 
-
-for i in range(6):
+for i in range(7):
     root.grid_rowconfigure(i, weight=1)
 for j in range(5):
     root.grid_columnconfigure(j, weight=1)
