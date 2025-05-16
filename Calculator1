@@ -1,16 +1,30 @@
 import tkinter as tk
 import math
 
+<<<<<<< HEAD
+=======
+# Обработка кнопок
+>>>>>>> Calculator3
 def click(symbol):
     if symbol in ('sin', 'cos', 'tan', 'log', 'sqrt'):
         entry.insert(tk.END, f"{symbol}(")
     elif symbol == 'π':
         entry.insert(tk.END, 'pi')
+<<<<<<< HEAD
     elif symbol == 'e':
         entry.insert(tk.END, 'e')
     else:
         entry.insert(tk.END, symbol)
 
+=======
+
+    elif symbol == 'e':
+        entry.insert(tk.END, 'e')
+        
+    else:
+        entry.insert(tk.END, symbol)
+
+>>>>>>> Calculator3
 def clear():
     entry.delete(0, tk.END)
 
@@ -18,6 +32,10 @@ def calculate():
     expr = entry.get().replace('^', '**')
     try:
         allowed_names = {k: v for k, v in math.__dict__.items() if not k.startswith("__")}
+<<<<<<< HEAD
+=======
+        # Добавим явные алиасы, если вдруг math.__dict__ не содержит их как нужно
+>>>>>>> Calculator3
         allowed_names['pi'] = math.pi
         allowed_names['e'] = math.e
         result = eval(expr, {"__builtins__": None}, allowed_names)
@@ -27,6 +45,7 @@ def calculate():
         entry.delete(0, tk.END)
         entry.insert(tk.END, "Ошибка")
 
+<<<<<<< HEAD
 # Функция для смены цвета кнопки "Calculator"
 def toggle_calculator_color():
     current_color = calc_button.cget("fg")
@@ -35,6 +54,12 @@ def toggle_calculator_color():
 
 root = tk.Tk()
 root.title("Расширенный калькулятор")
+=======
+# GUI
+root = tk.Tk()
+root.title("Расширенный калькулятор")
+
+>>>>>>> Calculator3
 root.geometry("360x550")
 root.configure(bg="#e8f0fe")
 
@@ -73,11 +98,16 @@ for (text, row, col) in buttons:
     else:
         bg_color = "#F0F3F4"
         fg_color = "black"
+<<<<<<< HEAD
+=======
+        
+>>>>>>> Calculator3
 
     tk.Button(root, text=text, font=('Arial', 16), width=5, height=2,
               bg=bg_color, fg=fg_color, activebackground="#e0e0e0",
               command=action).grid(row=row, column=col, padx=2, pady=2, sticky="nsew")
 
+<<<<<<< HEAD
 # Добавляем кнопку "Calculator"
 calc_button = tk.Button(root, text="Calculator", font=('Times New Roman', 20, 'italic'),
                         bg="#e8f0fe", fg="#1A5276", borderwidth=0,
@@ -86,6 +116,8 @@ calc_button = tk.Button(root, text="Calculator", font=('Times New Roman', 20, 'i
                         command=toggle_calculator_color)
 calc_button.grid(row=6, column=2, columnspan=3, padx=2, pady=2, sticky="nsew")
 
+=======
+>>>>>>> Calculator3
 for i in range(7):
     root.grid_rowconfigure(i, weight=1)
 for j in range(5):
