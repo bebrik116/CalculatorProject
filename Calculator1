@@ -73,6 +73,7 @@ for (text, row, col) in buttons:
     else:
         bg_color = "#F0F3F4"
         fg_color = "black"
+        
 
     tk.Button(root, text=text, font=('Arial', 16), width=5, height=2,
               bg=bg_color, fg=fg_color, activebackground="#e0e0e0",
