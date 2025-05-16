@@ -2,6 +2,7 @@ import tkinter as tk
 import math
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 # Обработка кнопок
 >>>>>>> Calculator3
@@ -25,12 +26,22 @@ def click(symbol):
         entry.insert(tk.END, symbol)
 
 >>>>>>> Calculator3
+=======
+# Обработка кнопок
+def click(symbol):
+    if symbol in ('sin', 'cos', 'tan', 'log', 'sqrt'):
+        entry.insert(tk.END, f"{symbol}(")
+    else:
+        entry.insert(tk.END, symbol)
+
+>>>>>>> Design
 def clear():
     entry.delete(0, tk.END)
 
 def calculate():
     expr = entry.get().replace('^', '**')
     try:
+<<<<<<< HEAD
         allowed_names = {k: v for k, v in math.__dict__.items() if not k.startswith("__")}
 <<<<<<< HEAD
 =======
@@ -38,6 +49,10 @@ def calculate():
 >>>>>>> Calculator3
         allowed_names['pi'] = math.pi
         allowed_names['e'] = math.e
+=======
+        # Разрешённые функции и константы
+        allowed_names = {k: v for k, v in math.__dict__.items() if not k.startswith("__")}
+>>>>>>> Design
         result = eval(expr, {"__builtins__": None}, allowed_names)
         entry.delete(0, tk.END)
         entry.insert(tk.END, str(result))
@@ -45,6 +60,7 @@ def calculate():
         entry.delete(0, tk.END)
         entry.insert(tk.END, "Ошибка")
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 # Функция для смены цвета кнопки "Calculator"
 def toggle_calculator_color():
@@ -61,6 +77,13 @@ root.title("Расширенный калькулятор")
 
 >>>>>>> Calculator3
 root.geometry("360x550")
+=======
+# GUI
+root = tk.Tk()
+root.title("Расширенный калькулятор")
+
+root.geometry("360x500")
+>>>>>>> Design
 root.configure(bg="#e8f0fe")
 
 entry = tk.Entry(root, font=('Arial', 24), borderwidth=2, relief="groove", justify='right')
@@ -71,6 +94,7 @@ buttons = [
     ('4', 2, 0),  ('5', 2, 1),  ('6', 2, 2),  ('*', 2, 3),  ('cos', 2, 4),
     ('1', 3, 0),  ('2', 3, 1),  ('3', 3, 2),  ('-', 3, 3),  ('tan', 3, 4),
     ('0', 4, 0),  ('.', 4, 1),  ('^', 4, 2),  ('+', 4, 3),  ('log', 4, 4),
+<<<<<<< HEAD
     ('(', 5, 0),  (')', 5, 1),  ('sqrt', 5, 2), ('C', 5, 3), ('=', 5, 4),
     ('π', 6, 0),  ('e', 6, 1)
 ]
@@ -102,11 +126,37 @@ for (text, row, col) in buttons:
 =======
         
 >>>>>>> Calculator3
+=======
+    ('(', 5, 0),  (')', 5, 1),  ('sqrt', 5, 2), ('C', 5, 3), ('=', 5, 4)
+]
+for (text, row, col) in buttons:
+    action = lambda x=text: calculate() if x == '=' else clear() if x == 'C' else click(x)
+    # Цветовая палитра
+    if text in ('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.'):
+        bg_color = "#D6EAF8"  # нежно-синий
+        fg_color = "#154360"
+    elif text in ('+', '-', '*', '/', '^'):
+        bg_color = "#FAD7A0"  # тёпло-оранжевый
+        fg_color = "#935116"
+    elif text in ('sin', 'cos', 'tan', 'log', 'sqrt'):
+        bg_color = "#D5F5E3"  # мятный
+        fg_color = "#196F3D"
+    elif text == '=':
+        bg_color = "#D2B4DE"  # сиреневый
+        fg_color = "white"
+    elif text == 'C':
+        bg_color = "#F1948A"  # розовый
+        fg_color = "white"
+    else:
+        bg_color = "#F0F3F4"  # светлый серый
+        fg_color = "black"
+>>>>>>> Design
 
     tk.Button(root, text=text, font=('Arial', 16), width=5, height=2,
               bg=bg_color, fg=fg_color, activebackground="#e0e0e0",
               command=action).grid(row=row, column=col, padx=2, pady=2, sticky="nsew")
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 # Добавляем кнопку "Calculator"
 calc_button = tk.Button(root, text="Calculator", font=('Times New Roman', 20, 'italic'),
@@ -119,8 +169,16 @@ calc_button.grid(row=6, column=2, columnspan=3, padx=2, pady=2, sticky="nsew")
 =======
 >>>>>>> Calculator3
 for i in range(7):
+=======
+
+for i in range(6):
+>>>>>>> Design
     root.grid_rowconfigure(i, weight=1)
 for j in range(5):
     root.grid_columnconfigure(j, weight=1)
 
+<<<<<<< HEAD
 root.mainloop()
+=======
+root.mainloop()
+>>>>>>> Design
